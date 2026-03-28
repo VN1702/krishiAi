@@ -18,7 +18,11 @@ app.use(bodyParser.json());
 
 let knowledge = [];
 try {
-  knowledge = JSON.parse(fs.readFileSync("./knowledge.json", "utf-8"));
+  const parsed = JSON.parse(fs.readFileSync("./knowledge.json", "utf-8"));
+  knowledge = Array.isArray(parsed) ? parsed : [];
+  if (!Array.isArray(parsed)) {
+    console.warn("⚠️ knowledge.json is not an array; using empty knowledge set.");
+  }
 } catch (err) {
   console.error("❌ Error loading knowledge.json:", err.message);
   knowledge = [];

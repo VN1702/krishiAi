@@ -1,6 +1,15 @@
-{
-  "wheat": "For wheat crops, use balanced fertilizer like DAP at sowing.",
-  "rice": "Rice requires proper irrigation and pest management.",
-  "fertilizer": "Use organic compost to improve soil health."
-}
+[
+  {
+    "keywords": ["wheat"],
+    "answer": "For wheat crops, use balanced fertilizer like DAP at sowing."
+  },
+  {
+    "keywords": ["rice"],
+    "answer": "Rice requires proper irrigation and pest management."
+  },
+  {
+    "keywords": ["fertilizer"],
+    "answer": "Use organic compost to improve soil health."
+  }
+]
 
