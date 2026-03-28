@@ -19,6 +19,7 @@ Krishi AI is a full-stack, AI-powered agricultural advisory platform designed to
 ## 🛠️ Technical Stack
 
 ### **Frontend**
+https://krishii-ai.netlify.app/
 
   * **React.js:** Component-based UI for a dynamic chat experience.
   * **Web Speech API:** Powering the voice recognition and synthesis.
@@ -27,7 +28,7 @@ Krishi AI is a full-stack, AI-powered agricultural advisory platform designed to
   * **Deployment:** Hosted on **Netlify**.
 
 ### **Backend**
-
+https://krishiiai.onrender.com/
   * **Node.js & Express:** Robust server-side logic and API management.
   * **Python:** Handling core AI logic and language processing.
   * **CORS:** Configured for secure cross-origin communication.
