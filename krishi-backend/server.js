@@ -4,12 +4,18 @@ import cors from "cors";
 import fetch from "node-fetch";
 import dotenv from "dotenv";
 import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
 import stringSimilarity from "string-similarity";
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const knowledgePath = path.join(__dirname, "knowledge.json");
 
 
 app.use(cors());
@@ -18,7 +24,7 @@ app.use(bodyParser.json());
 
 let knowledge = [];
 try {
-  const parsed = JSON.parse(fs.readFileSync("./knowledge.json", "utf-8"));
+  const parsed = JSON.parse(fs.readFileSync(knowledgePath, "utf-8"));
   knowledge = Array.isArray(parsed) ? parsed : [];
   if (!Array.isArray(parsed)) {
     console.warn("⚠️ knowledge.json is not an array; using empty knowledge set.");
@@ -28,6 +34,8 @@ try {
   knowledge = [];
 }
 
+console.log("knowledgePath", knowledgePath);
+console.log("knowledge loaded", knowledge, "length", knowledge.length, "isArray", Array.isArray(knowledge));
 
 function findAnswerFromKnowledge(query, location = "") {
   const q = (query + " " + location).toLowerCase();
@@ -74,20 +82,25 @@ Answer clearly and briefly: ${prompt}`;
 
 // ✅ Main Route
 app.post("/chat", async (req, res) => {
-  const { query, location } = req.body;
+  try {
+    const { query, location } = req.body;
 
-  // 1. Try Gemini API
-  let answer = await queryGemini(query, location);
+    // 1. Try Gemini API
+    let answer = await queryGemini(query, location);
 
-  // 2. If Gemini fails, fallback to knowledge.json
-  if (!answer) {
-    answer = findAnswerFromKnowledge(query, location);
+    // 2. If Gemini fails, fallback to knowledge.json
+    if (!answer) {
+      answer = findAnswerFromKnowledge(query, location);
+    }
+
+    res.json({
+      query,
+      answer: answer || "Sorry, I don’t have an answer right now. Please try again later.",
+    });
+  } catch (err) {
+    console.error("Unhandled /chat error:", err);
+    res.status(500).json({ error: String(err) });
   }
-
-  res.json({
-    query,
-    answer: answer || "Sorry, I don’t have an answer right now. Please try again later.",
-  });
 });
 
 // Start server
